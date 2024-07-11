@@ -114,21 +114,25 @@ public class Main {
 
 
 //        Keyword Ranking
-//        JavaRDD<String> initialRDD = sc.textFile("Project/src/main/resources/subtitles/input.txt");
-//        JavaRDD<String> sentences = initialRDD.map(sentence -> sentence.replaceAll("[^a-zA-Z\\s]", "").toLowerCase());
-//        JavaRDD<String> removedBlackLines = sentences.filter(sentence -> sentence.trim().length()>0);
-//        JavaRDD<String> words = removedBlackLines.flatMap(value -> Arrays.asList(value.split(" ")).iterator());
-//        JavaRDD<String> removedBlackWords = words.filter(sentence -> sentence.trim().length()>0);
-//
-//        JavaRDD<String> interstingWords = removedBlackWords.filter(Util::isNotBoring);
-//        JavaPairRDD<String, Long> pairRDD = interstingWords.mapToPair(word -> new Tuple2<>(word, 1L))
-//                .reduceByKey((value1, value2) -> value1+value2);
-//
-//        JavaPairRDD<Long, String> invertedPair = pairRDD.mapToPair(tuple -> new Tuple2<>(tuple._2, tuple._1))
-//                .sortByKey(false);
-//        List<Tuple2<Long, String>> result = invertedPair.take(50);
+        JavaRDD<String> initialRDD = sc.textFile("Project/src/main/resources/subtitles/input.txt");
+        JavaRDD<String> sentences = initialRDD.map(sentence -> sentence.replaceAll("[^a-zA-Z\\s]", "").toLowerCase());
+        JavaRDD<String> removedBlackLines = sentences.filter(sentence -> sentence.trim().length()>0);
+        JavaRDD<String> words = removedBlackLines.flatMap(value -> Arrays.asList(value.split(" ")).iterator());
+        JavaRDD<String> removedBlackWords = words.filter(sentence -> sentence.trim().length()>0);
+
+        JavaRDD<String> interstingWords = removedBlackWords.filter(Util::isNotBoring);
+        JavaPairRDD<String, Long> pairRDD = interstingWords.mapToPair(word -> new Tuple2<>(word, 1L))
+                .reduceByKey((value1, value2) -> value1+value2);
+
+        JavaPairRDD<Long, String> invertedPair = pairRDD.mapToPair(tuple -> new Tuple2<>(tuple._2, tuple._1))
+                .sortByKey(false);
+        List<Tuple2<Long, String>> result = invertedPair.take(50);
+        result.forEach(System.out::println);
+
+        Scanner scan = new Scanner(System.in);
+        scan.nextLine();
+        sc.close();
 //        here we used take 10 hence foreach    worked here
-//        result.forEach(System.out::println);
 
 //        ***  Sorting doesnt work with foreach   Coalese()
 //        and it has nothing to do with partition and is giving output of each partition
@@ -149,6 +153,13 @@ public class Main {
 //        if the results are stiff "big", we'd write to a (eg HDFS) file
 
 
+//      Action v/s Transformation
+//        Action is where the real calculation of the RDD takes place its not just execution plan
+//        rest all are just Transformations these all are lazly calculated
+//        Spark can implement for eg filter transformation without moving any data around. For this reason it is called a "Narrow Transformation
+//         then there is another transformation where shuffling is done this is called wide transformation
 
+
+//        Shuffles
      }
 }
