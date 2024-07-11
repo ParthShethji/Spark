@@ -167,11 +167,11 @@ public class Main {
 //            Group by tries to keep all the same type data in one partition this can cause out of memoty error hence we gnerally avoid using it
 //        even it has to do same thing but it will reduce the data that are to be shuffled
 
-
         // Caching and Persistence
 
-//        When you get an action it has to go all the way initial RDD re run it doesnot store all the intermediatary media but it has optimisation some actions again
-//        we can use persist and use memory if want to store only in memoru or can also be stored in disk
+
+//        When you get an action it has to go all the way initial RDD re run it doesn't store all the intermediate media but it has optimisation some actions again
+//        we can use persist and use memory if want to store only in memory or can also be stored in disk
 
 
 
