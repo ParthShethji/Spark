@@ -107,10 +107,48 @@ public class Main {
 
 //        Reading from a file
 //        here the entire file is not stored but partition of that big data is loaded
-        JavaRDD<String> initialRDD = sc.textFile("Project/src/main/resources/subtitles/input.txt");
+//        JavaRDD<String> initialRDD = sc.textFile("Project/src/main/resources/subtitles/input.txt");
+//
+//        initialRDD.flatMap(value -> Arrays.asList(value.split(" ")).iterator()).foreach(value -> System.out.println(value));
+//        sc.close();
 
-        initialRDD.flatMap(value -> Arrays.asList(value.split(" ")).iterator()).foreach(value -> System.out.println(value));
-        sc.close();
 
-    }
+//        Keyword Ranking
+//        JavaRDD<String> initialRDD = sc.textFile("Project/src/main/resources/subtitles/input.txt");
+//        JavaRDD<String> sentences = initialRDD.map(sentence -> sentence.replaceAll("[^a-zA-Z\\s]", "").toLowerCase());
+//        JavaRDD<String> removedBlackLines = sentences.filter(sentence -> sentence.trim().length()>0);
+//        JavaRDD<String> words = removedBlackLines.flatMap(value -> Arrays.asList(value.split(" ")).iterator());
+//        JavaRDD<String> removedBlackWords = words.filter(sentence -> sentence.trim().length()>0);
+//
+//        JavaRDD<String> interstingWords = removedBlackWords.filter(Util::isNotBoring);
+//        JavaPairRDD<String, Long> pairRDD = interstingWords.mapToPair(word -> new Tuple2<>(word, 1L))
+//                .reduceByKey((value1, value2) -> value1+value2);
+//
+//        JavaPairRDD<Long, String> invertedPair = pairRDD.mapToPair(tuple -> new Tuple2<>(tuple._2, tuple._1))
+//                .sortByKey(false);
+//        List<Tuple2<Long, String>> result = invertedPair.take(50);
+//        here we used take 10 hence foreach    worked here
+//        result.forEach(System.out::println);
+
+//        ***  Sorting doesnt work with foreach   Coalese()
+//        and it has nothing to do with partition and is giving output of each partition
+//        then waht we could  do is let it load into single partition and then apply foreach, Coalese() is used to make it all in 1 partition, but the problem is  that we migh get out of memory exception
+
+//        The real reason is - foreach is given to each partition in parallel hence printline is executed on each node in parallel so both are running printline in parallel
+
+
+//      Coalesce()
+//        After performing many transformations (and maybe actions) on our multi Terabyte, multi partition RDD, we've now reached the point where we only have a small amount of data.
+//                For the remaining transformations, there's no point in continuing across 1000 partitions - any shuffles will be pointlessly expensive
+//        Coalesce is just a way of reducing the number of partitions - it is never needed
+//        just to give the right answer. Virtual Pail Programmers
+
+
+//        Collect()
+//        collect() is generally used when you've finished and you want to gather a small  RDD onto the driver node for eg printing. Only call if you're sure the RDD will fit into a single JVM's RAM!
+//        if the results are stiff "big", we'd write to a (eg HDFS) file
+
+
+
+     }
 }
