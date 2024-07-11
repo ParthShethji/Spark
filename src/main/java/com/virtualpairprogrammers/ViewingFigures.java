@@ -2,6 +2,7 @@ package com.virtualpairprogrammers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -81,7 +82,8 @@ public class ViewingFigures
 				.reduceByKey((val1, val2)-> val1+val2);
 		scores.foreach(val1 -> System.out.println(val1));
 
-//		drop chapter
+		Scanner scanner = new Scanner(System.in);
+		scanner.nextLine();
 
 		sc.close();
 	}

@@ -114,24 +114,22 @@ public class Main {
 
 
 //        Keyword Ranking
-        JavaRDD<String> initialRDD = sc.textFile("Project/src/main/resources/subtitles/input.txt");
-        JavaRDD<String> sentences = initialRDD.map(sentence -> sentence.replaceAll("[^a-zA-Z\\s]", "").toLowerCase());
-        JavaRDD<String> removedBlackLines = sentences.filter(sentence -> sentence.trim().length()>0);
-        JavaRDD<String> words = removedBlackLines.flatMap(value -> Arrays.asList(value.split(" ")).iterator());
-        JavaRDD<String> removedBlackWords = words.filter(sentence -> sentence.trim().length()>0);
-
-        JavaRDD<String> interstingWords = removedBlackWords.filter(Util::isNotBoring);
-        JavaPairRDD<String, Long> pairRDD = interstingWords.mapToPair(word -> new Tuple2<>(word, 1L))
-                .reduceByKey((value1, value2) -> value1+value2);
-
-        JavaPairRDD<Long, String> invertedPair = pairRDD.mapToPair(tuple -> new Tuple2<>(tuple._2, tuple._1))
-                .sortByKey(false);
-        List<Tuple2<Long, String>> result = invertedPair.take(50);
-        result.forEach(System.out::println);
-
-        Scanner scan = new Scanner(System.in);
-        scan.nextLine();
-        sc.close();
+//        JavaRDD<String> initialRDD = sc.textFile("Project/src/main/resources/subtitles/input.txt");
+//        JavaRDD<String> sentences = initialRDD.map(sentence -> sentence.replaceAll("[^a-zA-Z\\s]", "").toLowerCase());
+//        JavaRDD<String> removedBlackLines = sentences.filter(sentence -> sentence.trim().length()>0);
+//        JavaRDD<String> words = removedBlackLines.flatMap(value -> Arrays.asList(value.split(" ")).iterator());
+//        JavaRDD<String> removedBlackWords = words.filter(sentence -> sentence.trim().length()>0);
+//
+//        JavaRDD<String> interstingWords = removedBlackWords.filter(Util::isNotBoring);
+//        JavaPairRDD<String, Long> pairRDD = interstingWords.mapToPair(word -> new Tuple2<>(word, 1L))
+//                .reduceByKey((value1, value2) -> value1+value2);
+//
+//        JavaPairRDD<Long, String> invertedPair = pairRDD.mapToPair(tuple -> new Tuple2<>(tuple._2, tuple._1))
+//                .sortByKey(false);
+//        List<Tuple2<Long, String>> result = invertedPair.take(50);
+//        result.forEach(System.out::println);
+//
+//        sc.close();
 //        here we used take 10 hence foreach    worked here
 
 //        ***  Sorting doesnt work with foreach   Coalese()
@@ -158,8 +156,29 @@ public class Main {
 //        rest all are just Transformations these all are lazly calculated
 //        Spark can implement for eg filter transformation without moving any data around. For this reason it is called a "Narrow Transformation
 //         then there is another transformation where shuffling is done this is called wide transformation
+//         Make minimum number of shuffles in java
 
 
 //        Shuffles
+//        **** Note in ---- if stage 1 is taking more time than stage 0 then there is a problem with performance there is need to finding a better approach
+
+
+//        Instead of using groupBy try using map-sid-reduce
+//            Group by tries to keep all the same type data in one partition this can cause out of memoty error hence we gnerally avoid using it
+//        even it has to do same thing but it will reduce the data that are to be shuffled
+
+
+        // Caching and Persistence
+
+//        When you get an action it has to go all the way initial RDD re run it doesnot store all the intermediatary media but it has optimisation some actions again
+//        we can use persist and use memory if want to store only in memoru or can also be stored in disk
+
+
+
+
+
+
+
+
      }
 }
